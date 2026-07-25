@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product | ZammaTech</title>
+
+    <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+
+    background:#f2f2f2;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    height:100vh;
+}
+
+.container{
+
+    width:450px;
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:10px;
+
+    box-shadow:0 0 10px rgba(0,0,0,.3);
+
+}
+
+h1{
+
+    text-align:center;
+
+    margin-bottom:25px;
+
+}
+
+input,
+select{
+
+    width:100%;
+
+    padding:12px;
+
+    margin:10px 0;
+
+    border:1px solid #ccc;
+
+    border-radius:5px;
+
+    font-size:16px;
+
+}
+
+button{
+
+    width:100%;
+
+    padding:14px;
+
+    margin-top:15px;
+
+    border:none;
+
+    background:#0b0b24;
+
+    color:white;
+
+    font-size:18px;
+
+    border-radius:5px;
+
+    cursor:pointer;
+
+}
+
+button:hover{
+
+    background:#1c1c5a;
+
+}
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Add Product</h1>
+
+    <form id="productForm">
+
+        <input type="text"
+               id="product_name"
+               placeholder="Product Name"
+               required>
+
+        <input type="number"
+               id="price"
+               placeholder="Price"
+               required>
+
+        <input type="number"
+               id="remaining_stock"
+               placeholder="Remaining Stock"
+               required>
+
+        <input type="text"
+               id="image_url"
+               placeholder="Image URL">
+
+        <select id="category_id">
+
+            <option value="">Select Category</option>
+
+            <option value="1">Traditional Laptop</option>
+            <option value="2">Ultrabook</option>
+            <option value="3">Gaming Laptop</option>
+            <option value="4">2-in-1 Convertible</option>
+            <option value="5">Business Laptop</option>
+            <option value="6">Workstation Laptop</option>
+            <option value="7">Chromebook</option>
+            <option value="8">Rugged Laptop</option>
+
+        </select>
+
+        <button type="submit">
+            Add Product
+        </button>
+
+    </form>
+
+</div>
+
+<script >
+
+const form = document.getElementById("productForm");
+
+form.addEventListener("submit", async (e) => {
+
+    e.preventDefault();
+
+    const product_name = document.getElementById("product_name").value;
+    const price = document.getElementById("price").value;
+    const remaining_stock = document.getElementById("remaining_stock").value;
+    const image_url = document.getElementById("image_url").value;
+    const category_id = document.getElementById("category_id").value;
+
+    try {
+
+        const response = await fetch("http://localhost:3000/api/products", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+
+                product_name,
+                price,
+                remaining_stock,
+                image_url,
+                category_id
+
+            })
+
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+
+            alert(data.message);
+
+            form.reset();
+
+        } else {
+
+            alert(data.message);
+
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert("Cannot connect to server.");
+
+    }
+
+});
+
+
+</script>
+
+</body>
+</html>

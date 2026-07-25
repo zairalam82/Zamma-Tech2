@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My wishlist </title>
+    <style>
+        
+ .navbar{
+    margin: -9px;
+    padding: 3px;
+    background-color: rgb(0, 0,22);
+ }       
+        .navbar h1{
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: rgb(0, 0,22);
+            color: aliceblue;
+            padding: 32px;
+            margin: 0px;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+        } 
+
+body{
+    background-color:#76a49480;
+}
+.product-card {
+    width: 320px;
+    background: white;
+    border-radius: 15px;
+    margin: 15px;
+    overflow: hidden;
+    box-shadow: 0px 3px 12px rgba(0,0,0,0.2);
+}
+
+.product-card img{
+    width: 210px;
+    height: 230px;
+}
+
+.wishlist{
+    font-size: 32px;
+    color: black;
+    text-align: right;
+}
+
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+    <h1>My Wishlist  ❤️</h1>
+            
+    </nav>
+    <div class="wishlist-container">
+    <!---Yahan jinta bhii html ka kam hoga woh dynamically js karay ga-->
+    </div>
+
+    <script>
+<!--Here the real game begins ab yahi kam ka hy-->
+const wishlistcontainer=document.querySelector(".wishlist-container");
+
+const requestPromise=fetch("http://localhost:3000/api/wishlist/1");
+
+requestPromise
+.then((response)=>{
+    if(!response.ok){
+        throw new Error('Network response was not ok');
+    }
+    return response.json();
+})
+.then((data)=>{
+    console.log("Data received from backend:",data);
+    //How to convert the data into html
+data.forEach((product)=> {
+    console.log(product);
+
+const card=document.createElement("div");
+card.className="product-card";
+wishlistcontainer.append(card);
+
+const div2=document.createElement("div");
+div2.className="wishlist";
+div2.innerText="❤️";
+card.append(div2);
+
+const image=document.createElement("img");
+image.src=product.image_url;
+card.append(image);
+
+const div3=document.createElement("div");
+div3.className="product-info"
+card.append(div3);
+
+const h3=document.createElement("h3");
+h3.innerText=product.product_name;
+div3.append(h3);
+
+const para1=document.createElement("p"); //The category will be empty because it does not return value from backedn bad me hum bakend me ye changing kr k krwa sakthay hy
+para1.className="category"; 
+div3.appendChild(para1);
+
+const para2=document.createElement("p");
+para2.className="price";
+para2.innerText=`Rs.${product. price}`;
+div3.appendChild(para2);
+
+});
+
+})
+.catch((error)=>{
+    console.log("There was a problem with a fetch operation",error);
+});
+   
+
+
+
+    </script>
+    
+</body>
+</html>

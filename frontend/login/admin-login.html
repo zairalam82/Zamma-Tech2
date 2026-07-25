@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | ZammaTech</title>
+
+    <style>
+        body {
+            background-color: black;
+        }
+
+        .login-container {
+            width: 350px;
+            margin: 100px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+
+        input {
+
+            width: 81%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button:hover {
+            background-color: rgba(0, 0, 22);
+            color: aliceblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>Admin Login</h1>
+        <form id="adminloginForm">
+            <input type="email" id="email" placeholder="Enter email" required>
+            <input type="password" id="password" placeholder="password" required>
+
+            <button id="submit">Login</button>
+        </form>
+        <p>
+            Don't have an account?
+            <a href="register.html">Register</a>
+        </p>
+
+    </div>
+
+
+    <script>
+        const form = document.getElementById("adminloginForm");
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            const requestPromise = fetch("http://localhost:3000/api/users/login", {
+                method: "POST",
+                credentials:"include",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    role: "admin"
+                })
+            });
+            requestPromise
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("wrong email or passward");
+                        throw new Error("Invalid creditionals");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    alert(data.message);
+                    localStorage.setItem("admin", JSON.stringify(data.user));
+                    localStorage.setItem("token",data.token); //token is already JSON.stringify isliye nhe likha
+                    window.location.href = "admin-dashboard.html";
+                })
+
+                .catch((error) => {
+                    console.log(error);
+                    if (error.message !== "Invalid creditionals") {
+                        alert("Server is not running");
+                    }
+
+
+                });
+
+
+
+        })
+    </script>
+
+</body>
+
+</html>

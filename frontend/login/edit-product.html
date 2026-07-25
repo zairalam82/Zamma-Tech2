@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Product</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.container{
+    width:450px;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 0 10px rgba(0,0,0,.3);
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+input,
+select{
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border:1px solid #ccc;
+    border-radius:5px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:#0b0b24;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:hover{
+    background:#1d1d5a;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>Edit Product</h1>
+
+<form id="editForm">
+
+<input
+type="text"
+id="product_name"
+placeholder="Product Name"
+required>
+
+<input
+type="number"
+id="price"
+placeholder="Price"
+required>
+
+<input
+type="number"
+id="remaining_stock"
+placeholder="Remaining Stock"
+required>
+
+<input
+type="text"
+id="image_url"
+placeholder="Image URL">
+
+<select id="category_id">
+
+<option value="1">Traditional Laptop</option>
+<option value="2">Ultrabook</option>
+<option value="3">Gaming Laptop</option>
+<option value="4">2-in-1 Convertible</option>
+<option value="5">Business Laptop</option>
+<option value="6">Workstation Laptop</option>
+<option value="7">Chromebook</option>
+<option value="8">Rugged Laptop</option>
+
+</select>
+
+<button type="submit">
+Update Product
+</button>
+
+</form>
+
+</div>
+
+<script>
+
+const params=new URLSearchParams(window.location.search);
+
+const id=params.get("id");
+
+async function loadProduct(){
+
+    try{
+
+        const response=await fetch("http://localhost:3000/api/products");
+
+        const products=await response.json();
+
+        const product=products.find(p=>p.product_id==id);
+
+        if(!product){
+
+            alert("Product not found");
+
+            return;
+
+        }
+
+        document.getElementById("product_name").value=product.product_name;
+
+        document.getElementById("price").value=product.price;
+
+        document.getElementById("remaining_stock").value=product.remaining_stock;
+
+        document.getElementById("image_url").value=product.image_url;
+
+        document.getElementById("category_id").value=product.category_id;
+
+    }catch(error){
+
+        console.log(error);
+
+        alert("Cannot load product.");
+
+    }
+
+}
+
+loadProduct();
+
+const form=document.getElementById("editForm");
+
+form.addEventListener("submit",async(e)=>{
+
+    e.preventDefault();
+
+    const product_name=document.getElementById("product_name").value;
+
+    const price=document.getElementById("price").value;
+
+    const remaining_stock=document.getElementById("remaining_stock").value;
+
+    const image_url=document.getElementById("image_url").value;
+
+    const category_id=document.getElementById("category_id").value;
+
+    try{
+
+        const response=await fetch(`http://localhost:3000/api/products/${id}`,{
+
+            method:"PUT",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                product_name,
+                price,
+                remaining_stock,
+                image_url,
+                category_id
+
+            })
+
+        });
+
+        const data=await response.json();
+
+        alert(data.message);
+
+        window.location.href="view-products.html";
+
+    }catch(error){
+
+        console.log(error);
+
+        alert("Cannot update product.");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>

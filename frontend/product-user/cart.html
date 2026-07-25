@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Cart</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f4f4f4;
+}
+
+.container{
+    width:90%;
+    margin:30px auto;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:12px;
+    text-align:center;
+}
+
+th{
+    background:#0b0b24;
+    color:white;
+}
+
+img{
+    width:80px;
+    height:60px;
+    object-fit:cover;
+}
+
+button{
+    padding:8px 15px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    color:white;
+}
+
+.plus{
+    background:green;
+}
+
+.minus{
+    background:orange;
+}
+
+.delete{
+    background:red;
+}
+
+.checkout{
+    background:#0b0b24;
+    margin-top:20px;
+    padding:12px 30px;
+}
+
+.total{
+    text-align:right;
+    font-size:24px;
+    margin-top:20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>My Cart</h1>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Image</th>
+<th>Product</th>
+<th>Price</th>
+<th>Quantity</th>
+<th>Total</th>
+<th>Actions</th>
+
+</tr>
+
+</thead>
+
+<tbody id="cartTable">
+
+</tbody>
+
+</table>
+
+<div class="total">
+
+Total Bill:
+Rs. <span id="grandTotal">0</span>
+
+</div>
+
+<center>
+
+<button
+class="checkout"
+onclick="checkout()">
+
+Checkout
+
+</button>
+
+</center>
+
+</div>
+
+<script>
+
+const table=document.getElementById("cartTable");
+
+const grandTotal=document.getElementById("grandTotal");
+
+/* Logged-in user */
+const user=JSON.parse(localStorage.getItem("user"));
+
+async function loadCart(){
+
+    try{
+
+        const response=await fetch(`http://localhost:3000/api/cart/${user.user_id}`);
+
+        const cart=await response.json();
+
+        table.innerHTML="";
+
+        let total=0;
+
+        cart.forEach(item=>{
+
+            const subtotal=item.price*item.quantity;
+
+            total+=subtotal;
+
+            table.innerHTML+=`
+
+            <tr>
+
+            <td>
+
+            <img src="${item.image_url}">
+
+            </td>
+
+            <td>
+
+            ${item.product_name}
+
+            </td>
+
+            <td>
+
+            Rs. ${item.price}
+
+            </td>
+
+            <td>
+
+            ${item.quantity}
+
+            </td>
+
+            <td>
+
+            Rs. ${subtotal}
+
+            </td>
+
+            <td>
+
+            <button
+            class="plus"
+            onclick="increase(${item.cart_id})">
+
+            +
+
+            </button>
+
+            <button
+            class="minus"
+            onclick="decrease(${item.cart_id})">
+
+            -
+
+            </button>
+
+            <button
+            class="delete"
+            onclick="removeItem(${item.cart_id})">
+
+            Delete
+
+            </button>
+
+            </td>
+
+            </tr>
+
+            `;
+
+        });
+
+        grandTotal.innerHTML=total;
+
+    }
+
+    catch(error){
+
+        console.log(error);
+
+        alert("Cannot load cart.");
+
+    }
+
+}
+
+loadCart();
+
+async function increase(id){
+
+    await fetch(`http://localhost:3000/api/cart/increase/${id}`,{
+
+        method:"PUT"
+
+    });
+
+    loadCart();
+
+}
+
+async function decrease(id){
+
+    await fetch(`http://localhost:3000/api/cart/decrease/${id}`,{
+
+        method:"PUT"
+
+    });
+
+    loadCart();
+
+}
+
+async function removeItem(id){
+
+    await fetch(`http://localhost:3000/api/cart/${id}`,{
+
+        method:"DELETE"
+
+    });
+
+    loadCart();
+
+}
+
+function checkout(){
+
+    window.location.href="checkout.html";
+
+}
+
+</script>
+
+</body>
+</html>

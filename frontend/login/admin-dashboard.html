@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+
+   <style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f5f5f5;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    text-align:center;
+    margin-top:40px;
+}
+
+h1{
+    margin-bottom:30px;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(2,250px);
+    justify-content:center;
+    gap:20px;
+}
+
+.card,
+button{
+    text-decoration:none;
+    background:#0b0b24;
+    color:white;
+    padding:20px;
+    border-radius:8px;
+    border:none;
+    cursor:pointer;
+    font-size:18px;
+}
+
+.card:hover,
+button:hover{
+    background:#1c1c5a;
+}
+
+
+   </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Admin Dashboard</h1>
+
+    <div class="cards">
+
+        <a href="add-product.html" class="card">
+            Add Product
+        </a>
+
+        <a href="view-products.html" class="card">
+            View Products
+        </a>
+
+        <a href="view-orders.html" class="card">
+            View Orders
+        </a>
+
+        <button id="logoutBtn">
+            Logout
+        </button>
+
+    </div>
+
+</div>
+
+<script >
+
+const admin = JSON.parse(localStorage.getItem("admin"));
+
+if (!admin) {
+    alert("Please login first.");
+    window.location.href = "admin-login.html";
+}
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+
+    localStorage.removeItem("admin");
+
+    window.location.href = "login.html";
+
+});
+
+
+
+</script>
+
+</body>
+</html>

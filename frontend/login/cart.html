@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Cart</title>
+    <style>
+h1{
+    margin: 10px;
+    padding: 12px;
+    background-color: rgb(0,0, 22);
+    color: aliceblue;
+    text-align: center;
+    justify-content: center;
+}
+
+body{
+    background-color: #76a49480;
+}
+
+
+    </style>
+</head>
+<body>
+
+    <h1>My Cart 🛒</h1>
+
+    <div id="cart-container"></div>
+
+<script>
+
+fetch("http://localhost:3000/api/cart",{
+
+    method:"GET",
+    credentials:"include"
+
+})
+
+.then(response=>{
+
+    if(!response.ok){
+        throw new Error("Network response was not ok");
+    }
+
+    return response.json();
+
+})
+
+.then(data=>{
+
+    console.log(data);
+
+    const container=document.getElementById("cart-container");
+
+    data.forEach(product=>{
+
+        const card=document.createElement("div");
+        card.className="cart-card";
+
+        const img=document.createElement("img");
+        img.src="http://localhost:3000"+product.image_url;
+        img.width=200;
+
+        const heading2=document.createElement("h2");
+        heading2.innerText=product.product_name;
+
+        const para1=document.createElement("p");
+        para1.innerText="Rs. "+product.price;
+
+        const para2=document.createElement("p");
+        para2.innerText="Quantity : "+product.quantity;
+
+        const btn=document.createElement("button");
+        btn.innerText="Remove";
+
+        card.appendChild(img);
+        card.appendChild(heading2);
+        card.appendChild(para1);
+        card.appendChild(para2);
+        card.appendChild(btn);
+
+        container.appendChild(card);
+
+        btn.addEventListener("click",function(){
+
+            fetch("http://localhost:3000/api/cart/"+product.product_id,{
+
+                method:"DELETE",
+                credentials:"include"
+
+            })
+
+            .then(response=>{
+
+                if(!response.ok){
+                    throw new Error("Delete failed");
+                }
+
+                return response.json();
+
+            })
+
+            .then(data=>{
+
+                alert(data.message);
+
+                card.remove();
+
+            })
+
+            .catch(err=>{
+
+                console.log(err);
+
+            });
+
+        });
+
+    });
+
+})
+
+.catch(err=>{
+
+    console.log(err);
+
+});
+
+</script>
+</body>
+</html>

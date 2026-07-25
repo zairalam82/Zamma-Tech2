@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ZammaTech</title>
+
+   <style>
+
+body{
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0,0,22);
+
+}
+
+.login-container{
+    background-color: aliceblue;
+    width: 350px;
+    padding: 43px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 15px rgb(0,0,0,0.3);
+}
+
+.login-container h1{
+    color: rgb(0,0,22);
+    margin-bottom: 14px;
+    margin-top: -4px;
+}
+
+.login-container h2{
+    color: rgb(98 91 91);
+    font-size: 16px;
+    margin-bottom: 28px;
+
+}
+
+
+button{
+    font-size: 14px;
+    border-radius: 2px ;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color:aliceblue;
+    color: black;
+    border: 2px solid black;
+
+}
+
+.login-container button:hover{
+    background:rgb(0,0,22);
+    color: aliceblue;
+}
+
+
+   </style>
+</head>
+<body>
+<div class="login-container">
+    <h1>ZammaTech</h1>
+    <h2>Select login Type</h2>
+    <!--Option of button will be the below two-->
+    <button onclick="location.href='user-login.html'"> User </button>
+
+    <button onclick="location.href='admin-login.html'"> Admin </button>
+</div>
+
+</body>
+</html>
