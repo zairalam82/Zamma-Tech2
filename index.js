@@ -9,7 +9,7 @@ const path = require("path");
 const app = express();
 
 app.use(cors({
-    origin: "http://127.0.0.1:5500",
+    origin: true,
     credentials: true
 }));
 
@@ -34,7 +34,7 @@ app.use('/api/wishlist',wishlistRoutes);
 app.use("/api/cart",cartRoutes);
 
 app.get('/',(req,res)=>{
-    res.send('Server is running!');
+    res.sendFile(path.join(__dirname, "frontend", "index.html"));
 });
 
 //The below code is for the sequelize connnection
