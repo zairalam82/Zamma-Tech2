@@ -1,3 +1,5 @@
+
+//redeploy 2
 require("dotenv").config();
 
 const sequelize=require("./config/sequelize");
