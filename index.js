@@ -34,7 +34,7 @@ app.use('/api/wishlist',wishlistRoutes);
 app.use("/api/cart",cartRoutes);
 
 app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname, "frontend", "index.html"));
+    res.sendFile(path.join(__dirname, "frontend", "main.html"));
 });
 
 //The below code is for the sequelize connnection
