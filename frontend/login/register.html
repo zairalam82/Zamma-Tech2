@@ -127,7 +127,7 @@
                 return;
             }
 
-            const requestPromise = fetch("https://zamma-tech2-production-7910.up.railway.app/login/register.html", {
+            const requestPromise = fetch("/api/users/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ user_name, email, password, role })
