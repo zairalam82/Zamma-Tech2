@@ -19,7 +19,7 @@ exports.register=(userData,callback)=>{
         role,
         (err,results)=>{
             if(err){
-                return useCallback(err,null);
+                return Callback(err,null);
             }else{
                 callback(null,results);
             }
